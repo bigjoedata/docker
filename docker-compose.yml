@@ -1,0 +1,83 @@
+version: '3.6'
+services:
+  phpmyadmin:
+    hostname: phpmyadmin
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - 'mariadb:db'
+    volumes:
+      - './myphpadmin/config/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php'
+    ports:
+      - '9002:80'
+    environment:
+      - PMA_HOST=mariadb
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    networks:
+      - default
+# mariadb configuration is for windows
+  mariadb:
+    image: mariadb:latest
+#    command: 'mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON'
+    command: mysqld --innodb-flush-method=fsync --sql-mode=""
+    container_name: mariadb
+    hostname: mariadb
+    volumes:
+      - './mariadb/data:/var/lib/mysql'
+      - './mariadb/config:/config'
+      - './mariadb/confd:/etc/mysql/conf.d'
+      - './mariadb/initdb:/docker-entrypoint-initdb'
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - TZ=${TZ}
+#  dataiku:
+#    image: dataiku/dss
+#    container_name: dataiku
+#    restart: unless-stopped
+#    networks:
+#      - default
+#    ports:
+#      - '10003:10000'
+#    volumes:
+#      - './dataiku:/home/dataiku/dss'
+  jupyter-datascience-notebook:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyter-datascience-notebook
+    volumes: 
+      - ./jupyter-datascience-notebook:/home/performance/work'
+    ports:
+      - '10000:8888'  
+#  jupyterhub not working yet
+#  jupyterhub:
+#    image: jupyterhub/jupyterhub:latest
+#    container_name: jupyterhub
+#    volumes: 
+#      - './jupyterhub/srv/jupyterhub:/srv/jupyterhub'
+#      - './jupyterhub/etc/jupyterhub:/etc/jupyterhub'
+#      - './jupyterhub/var/log:/var/log'
+#      - './jupyterhub/data:/opt/conda/share/jupyterhub'
+#      - './jupyterhub/users:/users'
+#      links:
+#      - mariadb:db
+#      ports:
+#      - 'XXXXX:8000'
+#  mlserver not working yet
+#  mlserver-onebox:
+#    image: mlserver-onebox:latest
+#    container_name: mlserver-onebox
+#    ports:
+#      - '11000:12800'
+#      - '11005:12805'
+networks:
+  default:
+    driver: bridge
