@@ -57,7 +57,7 @@ services:
       - ./jupyter-datascience-notebook:/home/performance/work'
     ports:
       - '10000:8888'  
-#  jupyterhub not working yet
+#  jupyterhub not working yet on windows
 #  jupyterhub:
 #    image: jupyterhub/jupyterhub:latest
 #    container_name: jupyterhub
