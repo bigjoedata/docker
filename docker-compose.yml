@@ -70,16 +70,6 @@ services:
       - "8082:9001"
     networks:
       - default
-#  dataiku:
-#    image: dataiku/dss
-#    container_name: dataiku
-#    restart: unless-stopped
-#    networks:
-#      - default
-#    ports:
-#      - '10003:10000'
-#    volumes:
-#      - './dataiku:/home/dataiku/dss'
   jupyter-datascience-notebook:
     image: jupyter/datascience-notebook:latest
     container_name: jupyter-datascience-notebook
@@ -87,27 +77,6 @@ services:
       - ./jupyter-datascience-notebook:/home/performance/work'
     ports:
       - '10000:8888'  
-#  jupyterhub not working yet on windows
-#  jupyterhub:
-#    image: jupyterhub/jupyterhub:latest
-#    container_name: jupyterhub
-#    volumes: 
-#      - './jupyterhub/srv/jupyterhub:/srv/jupyterhub'
-#      - './jupyterhub/etc/jupyterhub:/etc/jupyterhub'
-#      - './jupyterhub/var/log:/var/log'
-#      - './jupyterhub/data:/opt/conda/share/jupyterhub'
-#      - './jupyterhub/users:/users'
-#      links:
-#      - mariadb:db
-#      ports:
-#      - 'XXXXX:8000'
-#  mlserver not working yet
-#  mlserver-onebox:
-#    image: mlserver-onebox:latest
-#    container_name: mlserver-onebox
-#    ports:
-#      - '11000:12800'
-#      - '11005:12805'
 networks:
   default:
     driver: bridge
