@@ -40,6 +40,36 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - TZ=${TZ}
+  spacyapi:
+    hostname: spacyapi
+    container_name: spacyapi
+    image: 'jgontrum/spacyapi:en_v2'
+    restart: always
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - default
+  languagecrunch:
+    hostname: languagecrunch
+    container_name: languagecrunch
+    image: 'artpar/languagecrunch'
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - default
+  portia:
+    hostname: portia
+    container_name: portia
+    image: 'scrapinghub/portia'
+    restart: always
+    volumes:
+      - /d/projects/portia/projects:/app/data/projects:rw
+      - /d/projects/portia/output:/mnt:rw
+    ports:
+      - "8082:9001"
+    networks:
+      - default
 #  dataiku:
 #    image: dataiku/dss
 #    container_name: dataiku
